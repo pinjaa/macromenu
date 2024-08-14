@@ -1,0 +1,30 @@
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item {
+  color: #777;
+  text-align: center;
+  text-decoration: none;
+  flex-grow: 1;
+  font-size: 14px;
+}
+
+.nav-item span:first-child {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.active {
+  color: #007bff;
+}
