@@ -1,37 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/AddFoodForm.css';
+import {Text, View, TextInput, Button, Pressable } from 'react-native';
+import styles from '../styles/AddFoodFormStyle.js';
 
 export default function AddFoodForm({ addFood }) {
   const [foodName, setFoodName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [foodOptions, setFoodOptions] = useState([]); // Holds the current page items
-  const [fullFoodList, setFullFoodList] = useState([]); // Holds the full list of food items
+  const [foodOptions, setFoodOptions] = useState([]);
+  const [fullFoodList, setFullFoodList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 10; // Number of items per page
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    setLoading(false);
+    setError(null);
+    setFoodOptions([]);
+    setFullFoodList([]);
+    setCurrentPage(1);
+    setTotalPages(1);
+    setFoodName('');
+  }, [])
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(!foodName) {
+      setError('Enter food name to search.')
+      return;
+    } 
+
     setLoading(true);
     setError(null);
-    setFoodOptions([]); // Clear previous options
+    setFoodOptions([]);
 
     try {
-      const response = await axios.get(`https://fineli.fi/fineli/api/v1/foods?q=${foodName}`);
-      const foodData = response.data;
+        console.log('Fetching data for:', foodName);
+        const response = await axios.get(`https://fineli.fi/fineli/api/v1/foods?q=${foodName}`);
+        const foodData = response.data;
+  
+        console.log('API Response:', response.data);
 
-      if (foodData.length > 0) {
-        setFullFoodList(foodData); // Store the full list of results
-        setTotalPages(Math.ceil(foodData.length / itemsPerPage)); // Calculate total pages
-        setCurrentPage(1); // Reset to the first page
-        setFoodOptions(foodData.slice(0, itemsPerPage)); // Set the first page of results
-      } else {
-        setError('No food found with that name.');
-      }
+        if (foodData.length > 0) {
+          setFullFoodList(foodData);
+          setTotalPages(Math.ceil(foodData.length / itemsPerPage));
+          setCurrentPage(1);
+          setFoodOptions(foodData.slice(0, itemsPerPage));
+        } else {
+          setError('No food found with that name.');
+        }
+      
     } catch (err) {
       setError('Error fetching food data.');
+      console.error('API Fetch Error:', err.message);
     } finally {
       setLoading(false);
     }
@@ -54,48 +77,64 @@ export default function AddFoodForm({ addFood }) {
     };
     addFood(food);
     setFoodName('');
-    setFoodOptions([]); // Clear options after selection
-    setFullFoodList([]); // Clear the full list after selection
+    setFoodOptions([]);
+    setFullFoodList([]);
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
+    <View style={styles.container}>
+      <View style={styles.form}>
+      <Text style={styles.title}>Add a Food Item</Text>
+        <TextInput
+          style={styles.input}
           value={foodName}
-          onChange={(e) => setFoodName(e.target.value)}
+          onChangeText={setFoodName}
           placeholder="Enter food name..."
         />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Loading...' : 'Search Food'}
-        </button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
+        
+        {error && <Text style={styles.errorText}>{error}</Text>}
+      </View>
+      <View>
+        <Pressable
+          onPress={handleSubmit}
+          style={[styles.button]}>
+          <Text style={styles.buttonTextSettings}>SEARCH</Text>
+        </Pressable>
+      </View>
+      
 
       {foodOptions.length > 0 && (
-        <div>
-          <ul>
-            {foodOptions.map((foodItem, index) => (
-              <li key={index} onClick={() => handleSelectFood(foodItem)}>
-                {foodItem.name.fi}
-              </li>
-            ))}
-          </ul>
-          <div className="pagination">
+        <View>
+          <FlatList
+            data={foodOptions}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.foodItem}>
+                <Text
+                  style={styles.foodText}
+                  onPress={() => handleSelectFood(item)}
+                >
+                  <Text style={styles.foodName}>{item.name.fi}</Text> - Kcal: {item.energyKcal} kcal, 
+                  Protein: {item.protein.toFixed(1)}g, 
+                  Carbs: {item.carbohydrate.toFixed(1)}g, 
+                  Fats: {item.fat.toFixed(1)}g
+                </Text>
+              </View>
+            )}
+          />
+          <View style={styles.pagination}>
             {Array.from({ length: totalPages }, (_, index) => (
-              <button
+              <Button
                 key={index + 1}
+                title={(index + 1).toString()}
+                onPress={() => handlePageChange(index + 1)}
                 disabled={currentPage === index + 1}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
+              />
             ))}
-          </div>
-        </div>
+          </View>
+        </View>
       )}
-    </div>
+    </View>
   );
   
 }

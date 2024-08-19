@@ -1,22 +1,39 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 import '../styles/BottomNav.css';
+import Home from './Home';
+import AddFood from './AddFood';
+import Login from './Login';
+
+const Tab = createBottomTabNavigator();
 
 export default function BottomNav() {
   return (
-    <nav className="bottom-navigation">
-      <NavLink to="/" className="nav-item" activeClassName="active">
-        <span>🏠</span>
-        <span>Home</span>
-      </NavLink>
-      <NavLink to="/addfood" className="nav-item" activeClassName="active">
-        <span>🍽️</span>
-        <span>Add Food</span>
-      </NavLink>
-      <NavLink to="/login" className="nav-item" activeClassName="active">
-        <span>⚙️</span>
-        <span>Login</span>
-      </NavLink>
-    </nav>
+    
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'Add Food') {
+              iconName = 'plus';
+            }
+            else if (route.name === 'Login') {
+              iconName = 'key';
+            }
+
+            // Return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="AddFood" component={AddFood} />
+        <Tab.Screen name="Login" component={Login} />
+      </Tab.Navigator>
+    
   );
 }

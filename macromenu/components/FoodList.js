@@ -1,22 +1,32 @@
 import React from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import styles from '../styles/FoodItem';
 
 function FoodList({ foods }) {
   return (
-    <div>
-      <h2>Logged Foods</h2>
+    <View style={styles.container}>
+      <Text style={styles.title}>Logged Foods</Text>
       {foods.length === 0 ? (
-        <p>No foods added yet.</p>
+        <Text style={styles.noFoodsText}>No foods added yet.</Text>
       ) : (
-        <ul>
-          {foods.map((food, index) => (
-            <li key={index}>
-            <strong>{food.name}</strong> - Energy: {food.kcal.toFixed(0)}kcal, Protein: {food.protein.toFixed(1)}g, Carbs: {food.carbs.toFixed(1)}g, Fats: {food.fats.toFixed(1)}g
-          </li>          
-          ))}
-        </ul>
+        <FlatList
+          data={foods}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.foodItem}>
+              <Text style={styles.foodText}>
+                <Text style={styles.foodName}>{item.name}</Text> - Energy: {item.kcal.toFixed(0)} kcal, 
+                Protein: {item.protein.toFixed(1)}g, Carbs: {item.carbs.toFixed(1)}g, 
+                Fats: {item.fats.toFixed(1)}g
+              </Text>
+            </View>
+          )}
+        />
       )}
-    </div>
+    </View>
   );
 }
 
+
 export default FoodList;
+

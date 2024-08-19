@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Text, View } from 'react-native';
+import {Text, View, Alert } from 'react-native';
 import styles from '../styles/style.js';
 import AddFoodForm from './AddFoodForm.js';
 import FoodList from './FoodList.js';
@@ -9,21 +9,22 @@ export default function AddFood() {
   const [foods, setFoods] = useState([]);
   //const [goals, setGoals] = useState({ protein: 150, carbs: 200, fats: 70 });
 
-  const addFood = (food) => {
+  const addFoodToList = (food) => {
 
     if(food != null || food != "") 
     {
+      Alert.alert('Food Added', `Food: ${foodName}`);
       setFoods([...foods, food]);
     }
     
   };
 
   return (
-    <div>
-      <h1>Food Tracker</h1>
-      <AddFoodForm addFood={addFood} />
+    <View style={styles.container}>
+      <Text>Food Tracker</Text>
+      <AddFoodForm addFood={addFoodToList} />
       <FoodList foods={foods} />
       {/* <GoalTracker foods={foods} goals={goals} /> */}
-    </div>
+    </View>
   );
 }
