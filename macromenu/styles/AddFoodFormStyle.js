@@ -12,15 +12,19 @@ export default StyleSheet.create({
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
-    marginBottom: 10,
+    borderRadius: 5,
     paddingHorizontal: 8,
   },
   button: {
     backgroundColor: '#FFDd1d',
-    marginTop: 8,
     paddingVertical: 10,
     paddingHorizontal: 25,
-    borderRadius: 15
+    borderRadius: 15, 
+    marginBottom: 10,
+    marginTop: 10
+  },
+  buttonTextSettings: {
+    
   },
   errorText: {
     color: 'red',
