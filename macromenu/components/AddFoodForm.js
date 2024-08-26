@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {Text, View, TextInput, Button, Pressable } from 'react-native';
+import {Text, View, TextInput, Button, Pressable, FlatList } from 'react-native';
 import styles from '../styles/AddFoodFormStyle.js';
 
 export default function AddFoodForm({ addFood }) {
@@ -24,34 +24,32 @@ export default function AddFoodForm({ addFood }) {
   }, [])
   
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if(!foodName) {
-      setError('Enter food name to search.')
-      return;
-    } 
-
+  const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     setFoodOptions([]);
 
-    try {
-        console.log('Fetching data for:', foodName);
-        const response = await axios.get(`https://fineli.fi/fineli/api/v1/foods?q=${foodName}`);
-        const foodData = response.data;
-  
-        console.log('API Response:', response.data);
+    if(!foodName) {
+      setError("Enter food name.")
+      return;
+    }
 
-        if (foodData.length > 0) {
-          setFullFoodList(foodData);
-          setTotalPages(Math.ceil(foodData.length / itemsPerPage));
-          setCurrentPage(1);
-          setFoodOptions(foodData.slice(0, itemsPerPage));
-        } else {
-          setError('No food found with that name.');
-        }
-      
+    try {
+      const response = await axios.get(`https://fineli.fi/fineli/api/v1/foods?q=${foodName}`, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+        },
+      });
+
+      const foodData = response.data;
+      if (foodData.length > 0) {
+        setFullFoodList(foodData);
+        setTotalPages(Math.ceil(foodData.length / itemsPerPage));
+        setCurrentPage(1);
+        setFoodOptions(foodData.slice(0, itemsPerPage));
+      } else {
+        setError('No food found with that name.');
+      }
     } catch (err) {
       setError('Error fetching food data.');
       console.error('API Fetch Error:', err.message);
@@ -93,8 +91,7 @@ export default function AddFoodForm({ addFood }) {
         />
         
         {error && <Text style={styles.errorText}>{error}</Text>}
-      </View>
-      <View>
+      
         <Pressable
           onPress={handleSubmit}
           style={[styles.button]}>
@@ -114,7 +111,7 @@ export default function AddFoodForm({ addFood }) {
                   style={styles.foodText}
                   onPress={() => handleSelectFood(item)}
                 >
-                  <Text style={styles.foodName}>{item.name.fi}</Text> - Kcal: {item.energyKcal} kcal, 
+                  <Text style={styles.foodName}>{item.name.fi}</Text> - Kcal: {item.energyKcal.toFixed(0)} kcal, 
                   Protein: {item.protein.toFixed(1)}g, 
                   Carbs: {item.carbohydrate.toFixed(1)}g, 
                   Fats: {item.fat.toFixed(1)}g
