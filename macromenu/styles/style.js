@@ -19,4 +19,22 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 8,
+  },
+  button: {
+    backgroundColor: '#FFDd1d',
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 15, 
+    marginBottom: 10,
+    marginTop: 10
+  },
+  buttonText: {
+    color: 'black'
+  }
 })
