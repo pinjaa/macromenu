@@ -7,6 +7,8 @@ import Home from './components/Home';
 import AddFood from './components/AddFood';
 import Login from './components/Login';
 import BottomNav from './components/BottomNav';
+import UserInformation from './components/UserInformation.js';
+import Register from './components/Register.js';
 import styles from './styles/style.js';
 
 const Stack = createStackNavigator();
@@ -20,10 +22,12 @@ export default function App() {
             initialRouteName='BottomNav'
             screenOptions={{headerShown: false}}
         >
-          <Stack.Screen name="BottomNav" component={BottomNav} />
+        <Stack.Screen name="BottomNav" component={BottomNav} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="AddFood" component={AddFood} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name='UserInformation' component={UserInformation} />
+        <Stack.Screen name="Register" component={Register} />
         
       </Stack.Navigator>
       
