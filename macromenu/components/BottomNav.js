@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import '../styles/BottomNav.css';
 import Home from './Home';
 import AddFood from './AddFood';
@@ -20,14 +20,17 @@ export default function BottomNav() {
 
             if (route.name === 'Home') {
               iconName = 'home';
-            } else if (route.name === 'Add Food') {
-              iconName = 'plus';
+            } else if (route.name === 'AddFood') {
+              iconName = 'pizza';
             }
             else if (route.name === 'Login') {
               iconName = 'key';
             }
-            else if (route.name === 'User Info') {
+            else if (route.name === 'UserInfo') {
               iconName = 'person';
+            }
+            else if (route.name === 'Register') {
+              iconName = 'add';
             }
 
             // Return any component that you like here!
