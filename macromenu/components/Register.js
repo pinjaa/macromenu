@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import {Text, View, Pressable, Alert } from 'react-native';
+import {Text, View, Pressable, Alert, TextInput } from 'react-native';
+import styles from '../styles/style';
 
-export default function Register() {
+export default function Register({navigation}) {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -29,22 +30,26 @@ export default function Register() {
     <View>
       <Text>Register</Text>
       <TextInput 
+        style={styles.input}
         placeholder='Enter your email'
         value={email}
         onChangeText={(email) => setEmail(email.trim())} 
       />
       <TextInput 
+        style={styles.input}
         placeholder='Enter a username'
         value={username}
         onChangeText={(username) => setUsername(username.trim())} 
       />
       <TextInput 
+        style={styles.input}
         placeholder='Enter a password'
         value={password}
         onChangeText={(password) => setPassword(password)}
         secureTextEntry={true}
       />
       <TextInput 
+        style={styles.input}
         placeholder='Confirm password'
         value={confirmPassword}
         onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
@@ -52,14 +57,15 @@ export default function Register() {
       />
 
       <View style={[{flex: 1},{alignItems:'center'}]}>
-        <Pressable onPress={() => checkInformation()}>
+        <Pressable onPress={() => checkInformation()} style={styles.button}>
           <Text>REGISTER</Text>
         </Pressable>
         <Text>Already have an account?</Text>
         <Pressable
+          style={styles.button}
           onPress={() => navigation.navigate('Login')}
         >
-          <Text>LOGIN</Text>
+          <Text style={styles.buttonText}>LOGIN</Text>
         </Pressable>
       </View>
     </View>
