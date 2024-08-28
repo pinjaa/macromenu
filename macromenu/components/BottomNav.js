@@ -5,6 +5,8 @@ import '../styles/BottomNav.css';
 import Home from './Home';
 import AddFood from './AddFood';
 import Login from './Login';
+import UserInformation from './UserInformation';
+import Register from './Register';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +26,9 @@ export default function BottomNav() {
             else if (route.name === 'Login') {
               iconName = 'key';
             }
+            else if (route.name === 'User Info') {
+              iconName = 'person';
+            }
 
             // Return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -33,6 +38,8 @@ export default function BottomNav() {
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="AddFood" component={AddFood} />
         <Tab.Screen name="Login" component={Login} />
+        <Tab.Screen name="UserInfo" component={UserInformation} />
+        <Tab.Screen name="Register" component={Register} />
       </Tab.Navigator>
     
   );
